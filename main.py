@@ -2,21 +2,13 @@
 
 
 
+import FFT_Numpy_examples
+
+
+
+
 def main():
     print("Hello Lucas!")
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
