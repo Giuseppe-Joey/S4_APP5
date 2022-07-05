@@ -80,34 +80,7 @@ def sound_processing_filter_1000Hz(filename):
     irfft_spectrum = np.fft.irfft(fft_spectrum)
     irfft_spectrum_abs = np.fft.irfft(fft_spectrum_abs)
 
-
+    # writing back the signal into .wav file
     wavfile.write('./sounds/note_basson_filtered.wav', sampFreq, irfft_spectrum_abs.astype(np.int16))
 
 
-
-
-
-
-
-
-
-
-
-
-# this function create a .wav file with random short integer bytes 99999 seconds duration
-def write_wav_file(fileName, sampleFreq, duration, frequency, signalShape):
-    import wave, struct, math, random
-    #sampleRate = 44100.0  # hertz
-    #duration = 1.0  # seconds
-    #frequency = 440.0  # hertz
-    obj = wave.open(fileName, 'wb')
-    obj.setnchannels(1)  # mono
-    obj.setsampwidth(2)
-    obj.setframerate(sampleFreq)
-
-
-    for i in len(signalShape):
-        value = frequency[i]
-        data = struct.pack(value)
-        obj.writeframesraw(data)
-    obj.close()
