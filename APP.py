@@ -1,6 +1,76 @@
 
-def notes_dictionnary():
-    dictionnary = {}
+
+
+
+
+
+def notes_frequency_dictionnary():
+    """
+    This function is a dictionnary containing all the frequencies for every notes
+
+    :return: dictionnary
+    """
+    dictionnary = { 'DO': 261.6,
+                    'DO#': 277.2,
+                    'RE': 293.7,
+                    'RE#': 311.1,
+                    'MI': 329.6,
+                    'FA': 349.2,
+                    'FA#': 370.0,
+                    'SOL': 392.0,
+                    'SOL#': 415.3,
+                    'LA': 440.0,
+                    'LA#': 466.2,
+                    'SI': 493.9}
+    return dictionnary
+
+
+
+
+def notes_factor_dictionnary():
+    """
+    This function is a dictionnary containing all the frequencies for every notes
+
+    :return: dictionnary
+    """
+    dictionnary = { 'DO': 0.595,
+                    'DO#': 0.630,
+                    'RE': 0.667,
+                    'RE#': 0.707,
+                    'MI': 0.749,
+                    'FA': 0.794,
+                    'FA#': 0.841,
+                    'SOL': 0.891,
+                    'SOL#': 0.944,
+                    'LA': 1.000,
+                    'LA#': 1.060,
+                    'SI': 1.123}
+    return dictionnary
+
+
+
+
+
+
+def notes_K_index_dictionnary():
+    """
+    This function is a dictionnary containing all the k index for every notes
+
+    :return: dictionnary
+    """
+    dictionnary = {'DO': (-9),
+                   'DO#': (-8),
+                   'RE': (-7),
+                   'RE#': (-6),
+                   'MI': (-5),
+                   'FA': (-4),
+                   'FA#': (-3),
+                   'SOL': (-2),
+                   'SOL#': (-1),
+                   'LA': 0,
+                   'LA#': 1,
+                   'SI': 2}
+    return dictionnary
 
 
 

@@ -31,7 +31,15 @@ import time
 
 def main():
 
-    print("Hello Lucas!")
+    notes_frequency_dictionnary = APP.notes_frequency_dictionnary()
+    print("Here's the notes dictionnary: {}".format(notes_frequency_dictionnary))
+
+    notes_K_index_dictionnary = APP.notes_K_index_dictionnary()
+    print("Here's the notes dictionnary: {}".format(notes_K_index_dictionnary))
+
+    notes_factor_dictionnary = APP.notes_factor_dictionnary()
+    print("Here's the notes dictionnary: {}".format(notes_factor_dictionnary))
+
 
     #FFT_Numpy_examples.generate_signal()
     #FFT_Numpy_examples.using_FFT()
