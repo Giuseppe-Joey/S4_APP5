@@ -47,7 +47,7 @@ def sound_processing_filter_1000Hz(filename):
     # plot the FFT amplitude before and after
     plt.figure("Filtering a signal", figsize=(12, 6))
     plt.subplot(121)
-    plt.stem(freq, np.abs(fft_spectrum), 'b', markerfmt=" ", basefmt="-b")
+    plt.stem(freq, fft_spectrum_abs, 'b', markerfmt=" ", basefmt="-b")
     plt.title('Before filtering')
     plt.xlim(0, 1500)
     plt.xlabel('Frequency (Hz)')
@@ -57,11 +57,12 @@ def sound_processing_filter_1000Hz(filename):
     for i, f in enumerate(freq):
         if f < 1020 and f > 980:  # (1)
             fft_spectrum[i] = 0.0
-        if f < 21 or f > 20000:  # (2)
-            fft_spectrum[i] = 0.0
+            fft_spectrum_abs[i] = 0.0
+        # if f < 21 or f > 20000:  # (2)
+        #     fft_spectrum[i] = 0.0
 
     plt.subplot(122)
-    plt.stem(freq, np.abs(fft_spectrum), 'b', markerfmt=" ", basefmt="-b")
+    plt.stem(freq, fft_spectrum_abs, 'b', markerfmt=" ", basefmt="-b")
     plt.title('After filtering')
     plt.xlim(0, 1500)
     plt.xlabel('Frequency (Hz)')
@@ -69,11 +70,32 @@ def sound_processing_filter_1000Hz(filename):
     plt.tight_layout()
     plt.show()
 
-    write_wav_file('note_basson_filtered.wav', sampFreq, length_in_secs, fft_spectrum)
+
+    # fft_spectrum = np.fft.rfft(signal)
+    # freq = np.fft.rfftfreq(signal.size, d=1. / sampFreq)
+    #
+
+    rfft_spectrum_abs = np.fft.rfft(fft_spectrum_abs)
+    ifft_spectrum_abs = np.fft.ifft(fft_spectrum_abs)
+    irfft_spectrum = np.fft.irfft(fft_spectrum)
+    irfft_spectrum_abs = np.fft.irfft(fft_spectrum_abs)
+
+
+    wavfile.write('./sounds/note_basson_filtered.wav', sampFreq, irfft_spectrum_abs.astype(np.int16))
+
+
+
+
+
+
+
+
+
+
 
 
 # this function create a .wav file with random short integer bytes 99999 seconds duration
-def write_wav_file(fileName, sampleFreq, duration, frequency):
+def write_wav_file(fileName, sampleFreq, duration, frequency, signalShape):
     import wave, struct, math, random
     #sampleRate = 44100.0  # hertz
     #duration = 1.0  # seconds
@@ -82,8 +104,10 @@ def write_wav_file(fileName, sampleFreq, duration, frequency):
     obj.setnchannels(1)  # mono
     obj.setsampwidth(2)
     obj.setframerate(sampleFreq)
-    for i in range(int(duration)):
-        #value = random.randint(-32767, 32767)
-        data = struct.pack('<h', frequency)
+
+
+    for i in len(signalShape):
+        value = frequency[i]
+        data = struct.pack(value)
         obj.writeframesraw(data)
     obj.close()
