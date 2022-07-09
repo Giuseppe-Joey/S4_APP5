@@ -42,11 +42,16 @@ import soundfile as sf
 
 
 
+
+
+
+
 def notes_frequency_dictionnary():
     """
-    This function is a dictionnary containing all the k index, factor and frequency for every notes
+    This function is a dictionnary containing all the k index,
+    factor and frequency for every notes
 
-    :return: dictionnary
+    :return: dictionnary: dict: a dictionnary containing all musicals notes and values
     """
     dictionnary = {'DO':    [-9, 0.595, 261.6],
                    'DO#':   [-8, 0.630, 277.2],
@@ -65,34 +70,42 @@ def notes_frequency_dictionnary():
 
 
 
-# declaring a dictionnary
-dictionnary = notes_frequency_dictionnary()
-# for key, array in dictionnary.items():
-#     print(key, array[0])
+
+
+
+def magnitude_to_dB(amplitude):
+    """
+    This function takes 1 argument(amplitude) and convert it into dB
+    and print the input and output.
+
+    :param magnitude: float: a signal amplitude to convert into dB
+    :return: decibel: float: the argument passed converted to decibel
+    """
+    decibel = 20 * np.log10(amplitude)
+    print("Converted {} into {} dB".format(amplitude, decibel))
+    return decibel
 
 
 
 
 
 
-def dB_to_Mag(decibel: int):
-    magnitude = decibel
-    return magnitude
 
 
 
 
+def get_sound_print_details(sound_file):
+    """
+    This function takes 1 argument (sound file in .wav format) and takes the
+    signal and print all key parameters of this file
 
+    :param sound_file: file: the file in .wav format to open
+    :return: signal: the signal extracted from the sound file
+    """
 
-
-
-window = 0
-sound_data = './sounds/note_guitare_LAd.wav'
-
-
-
-def get_sound_plus_window(sound_file, window):
-
+    print("----------------------------------------")
+    print("----- Sound processing function --------")
+    print("----------------------------------------")
     signal, Fs = sf.read(sound_file)
 
     # getting the duration in seconds from frequency
@@ -103,28 +116,64 @@ def get_sound_plus_window(sound_file, window):
 
     # print the sound type and the sample frequency
     print("Sound type is                : {}".format(signal.dtype))
-    print("Sound sampFreq is            : {}".format(Fs))
+    print("Sound sampFreq (Fs) is       : {}".format(Fs))
     print("Sound shape is               : {}".format(signal.shape))
     print("Sound length in secs is      : {}".format('{:,.3f}'.format(length_in_secs)))
     print("Sound time (what is this))   : {}".format(time))
     print("Sound size is                : {}".format(signal.size))
+    print("----------------------------------------\n\n")
 
-    # creating a window from the Fs (Sample Frequency)
-    window = np.hanning(Fs)
-    print("This is the window:", window)
 
+    # afficher le graphique du signal de base
+    plt.title('Signal de Depart')
+    plt.xlabel('Frequence Echantillonnage')
+    plt.ylabel('Signal Amplitude')
     plt.plot(signal)
     plt.show()
 
+    return signal
 
 
 
-def apply_fft_with_window(sound_data, window):
-    return 0
 
 
 
-get_sound_plus_window(sound_data, window)
+
+
+
+
+
+
+
+
+
+
+# testing the function
+magnitude_to_dB(10)
+magnitude_to_dB(100)
+magnitude_to_dB(1000)
+magnitude_to_dB(10000)
+magnitude_to_dB(100000)
+
+
+
+
+# declaring a dictionnary
+dictionnary = notes_frequency_dictionnary()
+# for key, array in dictionnary.items():
+#     print(key, array[0])
+
+
+
+# ouvrir le fichier et afficher les details et le graph
+sound_data = './sounds/note_guitare_LAd.wav'
+signal = get_sound_print_details(sound_data)
+
+
+
+
+
+
 
 
 
