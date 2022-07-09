@@ -94,19 +94,20 @@ def magnitude_to_dB(amplitude):
 
 
 
-def get_sound_print_details(sound_file):
+def sound_details(signal, Fs):
     """
     This function takes 1 argument (sound file in .wav format) and takes the
     signal and print all key parameters of this file
 
     :param sound_file: file: the file in .wav format to open
+    :param Fs: file: the Sample Frequency
     :return: signal: the signal extracted from the sound file
     """
 
     print("----------------------------------------")
     print("----- Sound processing function --------")
     print("----------------------------------------")
-    signal, Fs = sf.read(sound_file)
+
 
     # getting the duration in seconds from frequency
     length_in_secs = signal.shape[0] / Fs
@@ -115,14 +116,13 @@ def get_sound_print_details(sound_file):
     time = np.arange(signal.shape[0]) / signal.shape[0] * length_in_secs
 
     # print the sound type and the sample frequency
-    print("Sound type is                : {}".format(signal.dtype))
-    print("Sound sampFreq (Fs) is       : {}".format(Fs))
-    print("Sound shape is               : {}".format(signal.shape))
-    print("Sound length in secs is      : {}".format('{:,.3f}'.format(length_in_secs)))
-    print("Sound time (what is this))   : {}".format(time))
-    print("Sound size is                : {}".format(signal.size))
+    print("Sound dtype is                       : {}".format(signal.dtype))
+    print("Sound sample frequency (Fs) is       : {}".format(Fs))
+    print("Sound shape is (left(mono), right)   : {}".format(signal.shape))
+    print("Sound length in secs is              : {}".format('{:,.3f}'.format(length_in_secs)))
+    #print("Sound time (what is this))          : {}".format(time))
+    print("Sound size is                        : {}".format(signal.size))
     print("----------------------------------------\n\n")
-
 
     # afficher le graphique du signal de base
     plt.title('Signal de Depart')
@@ -131,7 +131,6 @@ def get_sound_print_details(sound_file):
     plt.plot(signal)
     plt.show()
 
-    return signal
 
 
 
@@ -141,6 +140,45 @@ def get_sound_print_details(sound_file):
 
 
 
+def calculating_omega(Fs, f):
+    omega = 2 * np.pi * f / Fs
+    print("Fs       :{} Sample/secs".format(Fs))
+    print("f        :{} Hz".format(f))
+    print("Omega    :{} rad/echantillons".format('{:,.2f}'.format(omega)))
+
+    return omega
+
+
+
+
+
+
+def fft_show_real_imag(signal, Fs):
+
+    fft_spectrum = np.fft.rfft(signal)
+    freq = np.fft.rfftfreq(signal.size, d=1. / Fs)
+
+    plt.figure("Filtering a signal", figsize=(12, 6))
+    plt.subplot(121)
+    plt.stem(freq, np.real(fft_spectrum), 'b', markerfmt=" ", basefmt="-b")
+    plt.title('Partie Reelle')
+    plt.xlim(0, 3000)
+    plt.xlabel('Frequency (Hz)')
+    plt.ylabel('FFT Amplitude')
+
+    plt.subplot(122)
+    plt.stem(freq, np.imag(fft_spectrum), 'b', markerfmt=" ", basefmt="-b")
+    plt.title('Partie Imaginaire')
+    plt.xlim(0, 3000)
+    plt.xlabel('Frequency (Hz)')
+    plt.ylabel('FFT Amplitude')
+    plt.tight_layout()
+    plt.show()
+
+
+    plt.show()
+
+    return fft_spectrum
 
 
 
@@ -167,7 +205,15 @@ dictionnary = notes_frequency_dictionnary()
 
 # ouvrir le fichier et afficher les details et le graph
 sound_data = './sounds/note_guitare_LAd.wav'
-signal = get_sound_print_details(sound_data)
+signal, Fs = sf.read(sound_data)
+sound_details(signal, Fs)
+
+f = 1000
+omega = calculating_omega(Fs, f)
+
+
+
+fft_show_real_imag(signal, Fs)
 
 
 

@@ -26,7 +26,7 @@ import soundfile as sf
 def exercice1():
     # definir mon vecteur avec n seulement
     # le N est la fenetre, plus la fenetre est grande, plus on a une bonne resolution
-    N = 20 # aleatoire pour commencer
+    N = 200 # aleatoire pour commencer
     n = np.arange(0, N)
     print(n)
 
@@ -45,15 +45,20 @@ def exercice1():
     # il sagit du signal 1 demande dans le labo
     x1 = np.sin((0.1 * np.pi * n) + (np.pi / 4))
     print(x1)
-    # plt.plot(x1)
-    # plt.show()
+    plt.plot(x1)
+    plt.show()
 
 
 
     # ensuite on multiplie le signal par la fenetre de Hann
     x1w = x1*w
+    plt.plot(x1w)
+    plt.show()
+
     X1w = np.fft.fft(x1w)
-    print(X1w)
+    plt.plot(X1w)
+    plt.show()
+
 
 
 
@@ -61,9 +66,8 @@ def exercice1():
 
     # ici on faity la fft et le 2e argument est le nombre de point quon lui dit de prendre
     X1 = np.fft.fft(x1)
-    print(X1)
-    # plt.plot(X1)
-    # plt.show()
+    plt.plot(X1)
+    plt.show()
 
 
 
@@ -78,6 +82,9 @@ def exercice1():
     plt.subplot(3, 1, 3)
     plt.title("Avec Fenetre de Hann")
     plt.plot(X1)
+    plt.subplot(3, 1, 4)
+    plt.title("Avec Fenetre de Hann")
+    plt.plot(x1w)
     plt.show()
 
 
@@ -117,7 +124,7 @@ def exercice1():
     x3 = 0
 
 
-
+exercice1()
 
 
 
@@ -213,10 +220,10 @@ def filtre_FIR(list_h):
 
 
 
-filtre_FIR(H)
+# filtre_FIR(H)
 
-plt.plot(H)
-plt.show()
+# plt.plot(H)
+# plt.show()
 
 
 

@@ -9,7 +9,18 @@
 # Author's Study :          Electrical Engineering
 # Author's Intern # :       N/A
 # Season / Session  :       Summer 2022
-# For : 	                APP5 - Laboratoire
+# For : 	                APP - testing before integrating to APP_Final.py
+
+
+
+
+
+
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy.io import wavfile
+
+import soundfile as sf
 
 
 
@@ -17,11 +28,6 @@
 
 
 def sound_processing_filter_1000Hz(filename_input, filename_output):
-    import matplotlib.pyplot as plt
-    import numpy as np
-    from scipy.io import wavfile
-
-    import soundfile as sf
 
 
     print("----------------------------------------")
@@ -44,15 +50,6 @@ def sound_processing_filter_1000Hz(filename_input, filename_output):
 
     # creating an array containing the time for the x_axis
     time = np.arange(signal.shape[0]) / signal.shape[0] * length_in_secs
-
-    # print the sound type and the sample frequency
-    print("Sound type is                : {}".format(signal.dtype))
-    print("Sound sampFreq is            : {}".format(sampFreq))
-    print("Sound shape is               : {}".format(signal.shape))
-    print("Sound length in secs is      : {}".format('{:,.3f}'.format(length_in_secs)))
-    print("Sound time (what is this))   : {}".format(time))
-    print("Sound size is                : {}".format(signal.size))
-
 
     # keeping only the real numbers and not the complex part
     fft_spectrum = np.fft.rfft(signal)
