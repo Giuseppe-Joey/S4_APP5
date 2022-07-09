@@ -33,18 +33,12 @@
 
 
 
-
-
-
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.signal import find_peaks
 
 import sys
 import soundfile as sf
-
-
-
 
 
 
@@ -78,14 +72,71 @@ dictionnary = notes_frequency_dictionnary()
 
 
 
-def dB_to_Mag(decibel: int):
 
+
+
+def dB_to_Mag(decibel: int):
+    magnitude = decibel
+    return magnitude
+
+
+
+
+
+
+
+
+window = 0
+sound_data = './sounds/note_guitare_LAd.wav'
+
+
+
+def get_sound_plus_window(sound_file, window):
+
+    signal, Fs = sf.read(sound_file)
+
+    # getting the duration in seconds from frequency
+    length_in_secs = signal.shape[0] / Fs
+
+    # creating an array containing the time for the x_axis
+    time = np.arange(signal.shape[0]) / signal.shape[0] * length_in_secs
+
+    # print the sound type and the sample frequency
+    print("Sound type is                : {}".format(signal.dtype))
+    print("Sound sampFreq is            : {}".format(Fs))
+    print("Sound shape is               : {}".format(signal.shape))
+    print("Sound length in secs is      : {}".format('{:,.3f}'.format(length_in_secs)))
+    print("Sound time (what is this))   : {}".format(time))
+    print("Sound size is                : {}".format(signal.size))
+
+    # creating a window from the Fs (Sample Frequency)
+    window = np.hanning(Fs)
+    print("This is the window:", window)
+
+    plt.plot(signal)
+    plt.show()
+
+
+
+
+def apply_fft_with_window(sound_data, window):
     return 0
 
 
 
+get_sound_plus_window(sound_data, window)
+
+
+
+
+
+
+
+
+
+
+
 # numero 1
-#
 # signal, Fs = sf.read('./sounds/note_guitare_LAd.wav')
 #
 #
@@ -101,30 +152,30 @@ def dB_to_Mag(decibel: int):
 
 
 
-# # Get magnitude and phase
+# Get magnitude and phase
 # magnitude_max = 0
 # magnitude = np.asarray(np.abs(fft_spectrum))
 # peaks = find_peaks(fft_spectrum)
+
+# for i in enumerate(peaks):
+#     if peaks[i] > magnitude_max:
+#             magnitude_max = peaks[i]
+
+# print("peaks are: ", peaks.max())
+# for i in enumerate(magnitude):
+#     if magnitude[i] > magnitude_max:
+#         magnitude_max = magnitude[i]
 #
-# # for i in enumerate(peaks):
-# #     if peaks[i] > magnitude_max:
-# #             magnitude_max = peaks[i]
-#
-# # print("peaks are: ", peaks.max())
-# # for i in enumerate(magnitude):
-# #     if magnitude[i] > magnitude_max:
-# #         magnitude_max = magnitude[i]
-# #
-# # print(magnitude_max)
-#
-#
-#
-#
+# print(magnitude_max)
+
+
+
+
 # phase = np.angle(fft_spectrum)
 # print("Magnitude:", magnitude)
 # np.set_printoptions(threshold=sys.maxsize)
 # print("phase:", phase)
-#
+
 # # plot the FFT amplitude BEFORE
 # plt.figure("Filtering a signal", figsize=(12, 6))
 # plt.subplot(121)
@@ -136,19 +187,4 @@ def dB_to_Mag(decibel: int):
 
 
 
-#plt.show()
-
-def env_temp():
-    signal, Fs = sf.read('./sounds/note_guitare_LAd.wav')
-    #sigabs = np.abs(signal)
-
-
-    plt.subplot(221)
-    plt.plot(signal)
-    plt.subplot(222)
-    plt.plot(signal)
-    plt.show()
-
-
-
-env_temp()
+# plt.show()
