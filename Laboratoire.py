@@ -16,6 +16,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import soundfile as sf
 
+
+
+
+
+
+
+
 def exercice1():
     # definir mon vecteur avec n seulement
     # le N est la fenetre, plus la fenetre est grande, plus on a une bonne resolution
@@ -153,6 +160,11 @@ def exercice1():
 # cela sera donc un filtre passe bas qui eliminera donc les frequence en haut de 2000 Hz
 
 # la derniere chose que pour cet exemple on aura pas a faire mais on pourrait aussi transformer notre passe-bas en PASSE-BANDE!!!!!
+
+
+
+def FIR_
+
 
 
 H = []
