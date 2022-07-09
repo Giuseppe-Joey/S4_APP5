@@ -235,3 +235,19 @@ def sound_processing_test(filename):
     plt.show()
 
     print("----------------------------------------")
+
+
+
+
+
+
+#wav_file_parameters(note_basson_1000_Hz)
+    #tests.TEST1()
+
+#tests.write_wav_file(test_file)
+    #tests.analyze_wav_file(note_basson_1000_Hz)
+    #tests.analyze_wav_file_2(note_basson_1000_Hz)
+
+
+    # tests.sound_processing_tests(note_guitare_LAd)
+    # tests.sound_processing_test(note_basson_1000_Hz)

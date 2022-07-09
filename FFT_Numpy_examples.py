@@ -232,3 +232,14 @@ def filtering_signal_using_FFT():
     plt.ylabel('FFT Amplitude')
     plt.tight_layout()
     plt.show()
+
+
+
+
+
+
+
+    #FFT_Numpy_examples.generate_signal()
+    #FFT_Numpy_examples.using_FFT()
+    #FFT_Numpy_examples.using_FFT_scipy()
+    #FFT_Numpy_examples.filtering_signal_using_FFT()
