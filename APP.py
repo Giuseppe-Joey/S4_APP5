@@ -36,8 +36,8 @@ def sound_processing_filter_1000Hz(filename_input, filename_output):
     plt.rcParams['figure.figsize'] = (9, 7)
 
     # reading the wav file (wavfile.read() function reads 16 or 32 bits wav file, 24 bits are not supported)
-    sampFreq, signal = wavfile.read(filename_input)
-    signal, samFreq = sf.read(filename_input)
+    #sampFreq, signal = wavfile.read(filename_input)
+    signal, sampFreq = sf.read(filename_input)
 
     # getting the duration in seconds from frequency
     length_in_secs = signal.shape[0] / sampFreq
@@ -57,7 +57,7 @@ def sound_processing_filter_1000Hz(filename_input, filename_output):
     # keeping only the real numbers and not the complex part
     fft_spectrum = np.fft.rfft(signal)
     freq = np.fft.rfftfreq(signal.size, d=1. / sampFreq)
-    #print("Complex part:{}".format(fft_spectrum))
+    print("Freq:{}".format(freq))
 
     #obtaining Amplitude vs Frequency spectrum we find absolute value of fourier transform
     fft_spectrum_abs = np.abs(fft_spectrum)

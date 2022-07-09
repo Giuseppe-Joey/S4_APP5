@@ -12,6 +12,41 @@
 
 
 
+# 1 - appliquer un fenetrage
+# 2 - faire une fft sur le signal
+# 3 - extraire phase, amplitude et frequence des sinusoides principales
+# 4 - redresser le signal (valeur absolue)
+# 5 - faire un filtre passe bas RIF a coeficients egaux (gain DC \ 0dB)
+# 6 - trouver lenveloppe temporelle
+# 7 - trouver lordre N du signal
+
+
+
+
+# 5 - utiliser le passe-bas et passer h[0] pour avoir passe bande
+# 6 -
+
+
+
+
+
+
+
+
+
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.signal import find_peaks
+
+import sys
+import soundfile as sf
+
+
+
+
+
 
 def notes_frequency_dictionnary():
     """
@@ -38,5 +73,66 @@ def notes_frequency_dictionnary():
 
 # declaring a dictionnary
 dictionnary = notes_frequency_dictionnary()
-for key, list in dictionnary.items():
-    print(key, list)
+# for key, array in dictionnary.items():
+#     print(key, array[0])
+
+
+
+def dB_to_Mag(decibel: int):
+
+    return 0
+
+
+
+# numero 1
+signal, Fs = sf.read('./sounds/note_guitare_LAd.wav')
+
+
+fft_spectrum = np.fft.rfft(signal)
+freq = np.fft.rfftfreq(signal.size, d=1. / Fs)
+
+# shifting up the signal
+fft_spectrum = np.abs(fft_spectrum)
+
+
+
+
+
+
+
+# Get magnitude and phase
+magnitude_max = 0
+magnitude = np.asarray(np.abs(fft_spectrum))
+peaks = find_peaks(fft_spectrum)
+
+# for i in enumerate(peaks):
+#     if peaks[i] > magnitude_max:
+#             magnitude_max = peaks[i]
+
+# print("peaks are: ", peaks.max())
+# for i in enumerate(magnitude):
+#     if magnitude[i] > magnitude_max:
+#         magnitude_max = magnitude[i]
+#
+# print(magnitude_max)
+
+
+
+
+phase = np.angle(fft_spectrum)
+print("Magnitude:", magnitude)
+np.set_printoptions(threshold=sys.maxsize)
+print("phase:", phase)
+
+# plot the FFT amplitude BEFORE
+plt.figure("Filtering a signal", figsize=(12, 6))
+plt.subplot(121)
+plt.stem(freq, fft_spectrum, 'b', markerfmt=" ", basefmt="-b")
+plt.title('Before filtering')
+plt.xlim(0, 5000)
+plt.xlabel('Frequency (Hz)')
+plt.ylabel('FFT Amplitude')
+
+
+
+plt.show()
