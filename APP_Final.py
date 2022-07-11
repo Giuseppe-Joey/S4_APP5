@@ -46,7 +46,7 @@ import soundfile as sf
 
 
 
-def notes_frequency_dictionnary():
+def APP_notes_frequency_dictionnary():
     """
     This function is a dictionnary containing all the k index,
     factor and frequency for every notes
@@ -73,7 +73,7 @@ def notes_frequency_dictionnary():
 
 
 
-def magnitude_to_dB(amplitude):
+def APP_magnitude_to_dB(amplitude):
     """
     This function takes 1 argument(amplitude) and convert it into dB
     and print the input and output.
@@ -81,8 +81,10 @@ def magnitude_to_dB(amplitude):
     :param magnitude: float: a signal amplitude to convert into dB
     :return: decibel: float: the argument passed converted to decibel
     """
+
     decibel = 20 * np.log10(amplitude)
     print("Converted {} into {} dB".format(amplitude, decibel))
+
     return decibel
 
 
@@ -93,8 +95,7 @@ def magnitude_to_dB(amplitude):
 
 
 
-
-def sound_details(signal, Fs):
+def APP_sound_details(signal, Fs):
     """
     This function takes 1 argument (sound file in .wav format) and takes the
     signal and print all key parameters of this file
@@ -107,7 +108,6 @@ def sound_details(signal, Fs):
     print("----------------------------------------")
     print("----- Sound processing function --------")
     print("----------------------------------------")
-
 
     # getting the duration in seconds from frequency
     length_in_secs = signal.shape[0] / Fs
@@ -140,7 +140,13 @@ def sound_details(signal, Fs):
 
 
 
-def calculating_omega(Fs, f):
+def APP_calculating_omega(Fs, f):
+    """
+    This function calculates
+    :param Fs: int: sample frequency
+    :param f: int: frequency
+    :return: omega:
+    """
     omega = 2 * np.pi * f / Fs
     print("Fs       :{} Sample/secs".format(Fs))
     print("f        :{} Hz".format(f))
@@ -153,7 +159,11 @@ def calculating_omega(Fs, f):
 
 
 
-def fft_show_real_imag(signal, Fs):
+
+
+
+
+def APP_fft_show_real_imag(signal, Fs):
 
     fft_spectrum = np.fft.rfft(signal)
     freq = np.fft.rfftfreq(signal.size, d=1. / Fs)
@@ -186,36 +196,118 @@ def fft_show_real_imag(signal, Fs):
 
 
 
-# testing the function
-magnitude_to_dB(10)
-magnitude_to_dB(100)
-magnitude_to_dB(1000)
-magnitude_to_dB(10000)
-magnitude_to_dB(100000)
+# cela va donner un passe bas mais pas centre a 0
+def APP_filtre_RIF(N, K):
+    """
+    This function makes a filter from an order N and a factor K
+
+    :param N: int: the order of the filter
+    :param K: int: the coeficient factor...
+    :return: h: int array: the array containing all int values
+    """
+
+    n = np.arange(1, N)
+    h = np.zeros(N)
+
+    h[0] = K / N
+    h[n] = np.sin(np.pi * n * K / N) / (N * np.sin(np.pi * n / N))
+
+    return h
+
+
+
+
+
+
+
+
+
+def APP_enveloppe_temporelle(signal, N):
+    """
+    This function is used to print on a graph the temporal envelop
+
+    :param signal: array: the signal to get the temporal envelop from
+    :param N: int: the order of the filter
+    """
+
+    window = np.hanning(N)
+    signal_abs = np.abs(signal)
+    hann = 2 * window / window.sum()
+
+    convolution = np.convolve(hann, signal_abs, mode='valid')
+
+    plt.plot(convolution)
+    plt.show()
+
+
 
 
 
 
 # declaring a dictionnary
-dictionnary = notes_frequency_dictionnary()
+dictionnary = APP_notes_frequency_dictionnary()
 # for key, array in dictionnary.items():
 #     print(key, array[0])
 
+# f = 1000
+# omega = calculating_omega(Fs, f)
+
+#fft_show_real_imag(signal, Fs)
 
 
+
+
+
+# DEBUT DU PROBLEMATIQUE
 # ouvrir le fichier et afficher les details et le graph
 sound_data = './sounds/note_guitare_LAd.wav'
 signal, Fs = sf.read(sound_data)
-sound_details(signal, Fs)
+APP_sound_details(signal, Fs)
 
-f = 1000
-omega = calculating_omega(Fs, f)
+# filter section
+N = 1024
+K = 3
+h = APP_filtre_RIF(N, K)
+plt.plot(h)
+plt.show()
 
 
 
-fft_show_real_imag(signal, Fs)
+
+def APP_window_and_fft(signal):
+    window = np.hanning(signal.size)
+    signal_window = window * signal
+    fft_spectrum = np.fft.fft(signal_window)
+    fft_spectrum_shift = np.fft.fftshift(APP_magnitude_to_dB(np.abs(fft_spectrum)))
+
+    plt.subplot(3, 1, 1)
+    plt.title("Fenetre de Hann")
+    #plt.xlabel('Frequency Echantillons')
+    plt.ylabel('FFT Amplitude')
+    plt.plot(window)
+
+    plt.subplot(3, 1, 2)
+    plt.title("Signal de base")
+    #plt.xlabel('Frequency Echantillons')
+    plt.ylabel('FFT Amplitude')
+    plt.plot(signal)
+
+    plt.subplot(3, 1, 3)
+    plt.title("Avec Fenetre de Hann et Shift")
+    plt.plot(fft_spectrum_shift)
+    plt.xlabel('Frequency Echantillon')
+    plt.ylabel('FFT Amplitude (dB)')
+    plt.tight_layout()
+
+    plt.show()
 
 
+
+
+APP_window_and_fft(signal)
+
+
+APP_enveloppe_temporelle(signal, signal.size)
 
 
 

@@ -68,8 +68,6 @@ def sound_processing_filter_1000Hz(filename_input, filename_output):
     plt.xlabel('Frequency (Hz)')
     plt.ylabel('FFT Amplitude')
 
-
-
     # filtering the 1000 Hz
     for i, f in enumerate(freq):
         if f < 1020 and f > 980:  # (1)

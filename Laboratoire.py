@@ -89,7 +89,7 @@ def exercice1():
 
 
     # now with the real value only and with fftshift
-    X1 = np.fft.fftshift(np.log(np.abs(X1)))
+    X1 = np.fft.fftshift(np.log10(np.abs(X1)))
     print(X1)
     plt.plot(X1)
     plt.show()
