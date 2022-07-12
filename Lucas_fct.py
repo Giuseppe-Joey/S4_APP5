@@ -31,7 +31,7 @@ import math
 
 
 sound_data = './sounds/note_guitare_LAd.wav'
-
+signal, fs = sf.read(sound_data)
 
 
 
@@ -75,7 +75,58 @@ def env_temp(sound_data,k):
 
 
 
+def coupe_bande(fs,signal):
+    N = 1024
+    n = np.arange(1, N)
+    n1 = np.arange(0, N)
+    fc = 20
 
+    #1
+    m = fc * N / fs
+    k = round((m * 2)+1)
+
+    if (k % 2) == 0:
+        k = k + 1
+
+
+    else:
+        print(" ")
+
+    #2
+    h_lp = np.zeros(N)
+    h_lp[n] = (np.sin(np.pi * n * k / N)) / (N * np.sin(np.pi * n / N))
+    h_lp[0] = k / N
+
+    #3
+    w1 = np.pi * ((k - 1) / N)
+    w0 = np.pi - w1
+
+    #4 dirac
+
+    d = np.zeros(N)
+    d[0] = 1
+
+    #4
+    h_cb = d * h_lp * 2 * np.cos(w0 * n1)
+
+    #5
+    sig_cb = np.convolve(h_cb, signal)
+
+    plt.subplot(3, 1, 1)
+    print(w1)
+    plt.plot(signal)
+    plt.title("signall")
+    plt.subplot(3, 1, 2)
+    print(w1)
+    plt.plot(h_cb)
+    plt.title("coupe-bande")
+    plt.subplot(3, 1, 3)
+    print(w1)
+    plt.plot(sig_cb)
+    plt.title("signal coupe")
+
+    plt.tight_layout() #bien mettre les titres
+    plt.show()
 
 
 
@@ -101,4 +152,4 @@ def find_k():
 
 
 k = find_k()
-env_temp(sound_data, k)
+coupe_bande(fs,signal)
