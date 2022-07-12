@@ -29,7 +29,7 @@ x = np.asarray([0,1,2,1], dtype=np.float32)
 # opening RAW files
 note_guitare_LAd = './sounds/note_guitare_LAd.wav'
 sampFreq, signal = wavfile.read(note_guitare_LAd)
-x, Fs = sf.read('./sounds/note_guitare_LAd.wav')
+x, Fs = sf.read('../sounds/note_guitare_LAd.wav')
 
 
 plt.figure("Open .wav with wavfile from scipy.io'", figsize=(12, 6))
@@ -139,7 +139,7 @@ y = np.convolve(x, h)
 
 
 
-x, Fs = sf.read('./sounds/note_guitare_LAd.wav')
+x, Fs = sf.read('../sounds/note_guitare_LAd.wav')
 
 print(x)
 print(Fs)
@@ -152,7 +152,7 @@ plt.plot(x)
 
 
 
-xx, Fss = sf.read('./sounds/note_basson_plus_sinus_1000_Hz.wav')
+xx, Fss = sf.read('../sounds/note_basson_plus_sinus_1000_Hz.wav')
 print(xx)
 print(Fss)
 plt.plot(xx)
@@ -162,7 +162,7 @@ plt.plot(xx)
 
 
 
-sf.write('./filtered_sounds/son_filtree.wav', x, samplerate=Fss)
+sf.write('../filtered_sounds/son_filtree.wav', x, samplerate=Fss)
 
 
 def fct(x, gain=1.0):
