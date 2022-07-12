@@ -257,6 +257,78 @@ def window_and_fft(signal):
 
 
 
+def coupe_bande(signal, fs):
+    """
+    This function is a low pass filter and a cut band filter
+
+    :param signal: datasignal
+    :param fs: sample rate frequency
+    :return: None
+    """
+
+    N = 1024
+    n = np.arange(1, N)
+    n1 = np.arange(0, N)
+    fc = 20
+
+    #1
+    m = fc * N / fs
+    k = round((m * 2)+1)
+
+    if (k % 2) == 0:
+        k = k + 1
+
+
+    else:
+        print("WTF!!!")
+
+    #2
+    h_lp = np.zeros(N)
+    h_lp[n] = (np.sin(np.pi * n * k / N)) / (N * np.sin(np.pi * n / N))
+    h_lp[0] = k / N
+
+    #3
+    w1 = np.pi * ((k - 1) / N)
+    w0 = np.pi - w1
+
+    #4 dirac
+    d = np.zeros(N)
+    d[0] = 1
+
+    #5
+    h_cb = d * h_lp * 2 * np.cos(w0 * n1)
+    # h_cb = h_lp * 2 * np.cos(w0 * n1)
+
+    #6
+    sig_cb = np.convolve(h_cb, signal)
+
+    plt.subplot(3, 1, 1)
+    plt.plot(signal)
+    plt.title("signal")
+
+    plt.subplot(3, 1, 2)
+    plt.plot(h_cb)
+    plt.title("coupe-bande")
+
+    plt.subplot(3, 1, 3)
+    sig_cb *= 100
+    plt.plot(sig_cb)
+    plt.title("signal coupe")
+
+    plt.tight_layout() #bien mettre les titres
+    plt.show()
+
+    return sig_cb
+
+
+
+
+
+
+
+
+
+
 
 def play_music(signal, sampFreq, dictionnary):
     """
@@ -397,9 +469,58 @@ def find_k():
             return k
 
 
+def amplitude_example(signal, fs):
+    # Number of sample points
+    N = 1000
+
+    # Sample spacing
+    T = 1.0 / 800.0  # f = 800 Hz
+
+    # Create a signal
+    x = np.linspace(0.0, N * T, N)
+    t0 = np.pi / 6  # non-zero phase of the second sine
+    y = np.sin(50.0 * 2.0 * np.pi * x) + 0.5 * np.sin(200.0 * 2.0 * np.pi * x + t0)
+    yf = np.fft.fft(y)  # to normalize use norm='ortho' as an additional argument
+
+    # Where is a 200 Hz frequency in the results?
+    freq = np.fft.fftfreq(x.size, d=T)
+    index, = np.where(np.isclose(freq, 200, atol=1 / (T * N)))
+
+    # Get magnitude and phase
+    magnitude = np.abs(yf[index[0]])
+    phase = np.angle(yf[index[0]])
+    print("Magnitude:", magnitude, ", phase:", phase)
+
+    # Plot a spectrum
+    plt.plot(freq[0:N // 2], 2 / N * np.abs(yf[0:N // 2]), label='amplitude spectrum')  # in a conventional form
+    plt.plot(freq[0:N // 2], np.angle(yf[0:N // 2]), label='phase spectrum')
+    plt.legend()
+    plt.grid()
+    plt.show()
 
 
 
 
 
+
+
+
+
+
+def amplitude_test(signal, fs):
+    from scipy.fftpack import fft
+    import numpy as np
+
+    fft_data = np.fft.fft(signal)
+    magnitude = np.abs(fft_data)
+    print(magnitude)
+    plt.plot(20*np.log10(magnitude))
+
+
+
+    # phase = np.angle(np.arctan2(np.fft.fft(fft_data), np.fft.fft(fft_data)))
+    # print(phase)
+    #
+    # plt.plot(phase)
+    plt.show()
 
