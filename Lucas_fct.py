@@ -1,4 +1,7 @@
 
+
+
+
 import numpy as np
 import scipy
 import matplotlib.pyplot as plt
@@ -12,6 +15,9 @@ import math
 
 
 
+
+
+
 #(extract 3 param)
 #1 extraction des parametres
 #2 applique fenetre de hanning
@@ -22,38 +28,25 @@ import math
 #coupe bas 20hz
 
 
+
+
 sound_data = './sounds/note_guitare_LAd.wav'
-signal, fs = sf.read(sound_data)
+
+
+
+
+
+
 
 def env_temp(sound_data,k):
     signal, fs = sf.read(sound_data)
     sigabs = np.abs(signal)
 
-    fc = 12000
-
-    # m = (k-1)/2
-    # N = round(fs * m / fc)
-    # print(N)
-
-    # n = np.arange(1, N-1)
     h = np.ones(k)/k
 
-
-    # window = np.hanning(N)
-    # window = window / window.sum()
-
     # filter the data using convolution
-    sigh = (np.convolve(h, sigabs))
+    sigh = np.convolve(h, sigabs)
 
-
-    # w0 = 2 * np.pi
-    # w1 = (fc * 2 * np.pi) / fs
-    # k = 3
-
-
-
-    #sigw = [x * h for x in signal]
-    # env = h * sigabs
 
     plt.subplot(311)
     plt.title("signal de base")
@@ -76,35 +69,24 @@ def env_temp(sound_data,k):
     plt.tight_layout()
     plt.show()
 
-
-def coupe_bande(fs):
-    signal, fs = sf.read(sound_data)
-    N = 1024
-    n = np.arange(0, N)
-
-    #1
-    m = 20 * N / fs
-    k = round((m * 2)+1)
-
-    if (k % 2) == 0:
-        k = k + 1
+    return sigh
 
 
-    else:
-        print(" ")
 
-    h = (np.sin(np.pi * n * k / N)) / (N * np.sin(np.pi * n / N))
-    h[0] = k / N
 
-    plt.subplot(1, 1, 1)
-    print(h)
-    plt.plot(h)
-    plt.title("Passe-bas")
 
-    plt.tight_layout() #bien mettre les titres
-    plt.show()
+
+
+
+
+
+
 
 def find_k():
+    """
+    This function
+    :return:
+    """
 
     k = 0
     while k < 1000:
@@ -119,4 +101,4 @@ def find_k():
 
 
 k = find_k()
-coupe_bande(fs)
+env_temp(sound_data, k)

@@ -9,7 +9,18 @@
 # Author's Study :          Electrical Engineering
 # Author's Intern # :       N/A
 # Season / Session  :       Summer 2022
-# For : 	                APP5 - Laboratoire
+# For : 	                APP - testing before integrating to APP_Final.py
+
+
+
+
+
+
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy.io import wavfile
+
+import soundfile as sf
 
 
 
@@ -17,11 +28,6 @@
 
 
 def sound_processing_filter_1000Hz(filename_input, filename_output):
-    import matplotlib.pyplot as plt
-    import numpy as np
-    from scipy.io import wavfile
-
-    import soundfile as sf
 
 
     print("----------------------------------------")
@@ -45,15 +51,6 @@ def sound_processing_filter_1000Hz(filename_input, filename_output):
     # creating an array containing the time for the x_axis
     time = np.arange(signal.shape[0]) / signal.shape[0] * length_in_secs
 
-    # print the sound type and the sample frequency
-    print("Sound type is                : {}".format(signal.dtype))
-    print("Sound sampFreq is            : {}".format(sampFreq))
-    print("Sound shape is               : {}".format(signal.shape))
-    print("Sound length in secs is      : {}".format('{:,.3f}'.format(length_in_secs)))
-    print("Sound time (what is this))   : {}".format(time))
-    print("Sound size is                : {}".format(signal.size))
-
-
     # keeping only the real numbers and not the complex part
     fft_spectrum = np.fft.rfft(signal)
     freq = np.fft.rfftfreq(signal.size, d=1. / sampFreq)
@@ -70,8 +67,6 @@ def sound_processing_filter_1000Hz(filename_input, filename_output):
     plt.xlim(0, 3000)
     plt.xlabel('Frequency (Hz)')
     plt.ylabel('FFT Amplitude')
-
-
 
     # filtering the 1000 Hz
     for i, f in enumerate(freq):
@@ -101,9 +96,76 @@ def sound_processing_filter_1000Hz(filename_input, filename_output):
 
 
 
-
 # Running the function
 note_basson_1000_Hz = './sounds/note_basson_plus_sinus_1000_Hz.wav'
 note_basson_filtered = './filtered_sounds/note_basson_filtered.wav'
 
 sound_processing_filter_1000Hz(note_basson_1000_Hz, note_basson_filtered)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# numero 1
+# signal, Fs = sf.read('./sounds/note_guitare_LAd.wav')
+#
+#
+# fft_spectrum = np.fft.rfft(signal)
+# freq = np.fft.rfftfreq(signal.size, d=1. / Fs)
+#
+# # shifting up the signal
+# fft_spectrum = np.abs(fft_spectrum)
+
+
+
+
+
+
+
+# Get magnitude and phase
+# magnitude_max = 0
+# magnitude = np.asarray(np.abs(fft_spectrum))
+# peaks = find_peaks(fft_spectrum)
+
+# for i in enumerate(peaks):
+#     if peaks[i] > magnitude_max:
+#             magnitude_max = peaks[i]
+
+# print("peaks are: ", peaks.max())
+# for i in enumerate(magnitude):
+#     if magnitude[i] > magnitude_max:
+#         magnitude_max = magnitude[i]
+#
+# print(magnitude_max)
+
+
+
+
+# phase = np.angle(fft_spectrum)
+# print("Magnitude:", magnitude)
+# np.set_printoptions(threshold=sys.maxsize)
+# print("phase:", phase)
+
+# # plot the FFT amplitude BEFORE
+# plt.figure("Filtering a signal", figsize=(12, 6))
+# plt.subplot(121)
+# plt.stem(freq, fft_spectrum, 'b', markerfmt=" ", basefmt="-b")
+# plt.title('Before filtering')
+# plt.xlim(0, 5000)
+# plt.xlabel('Frequency (Hz)')
+# plt.ylabel('FFT Amplitude')
+
+
+
+# plt.show()
