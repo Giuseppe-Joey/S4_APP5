@@ -230,52 +230,6 @@ def APP_filtre_RIF(N, K):
 
 
 
-def APP_enveloppe_temporelle(signal, N):
-    """
-    This function is used to print on a graph the temporal envelop
-
-    :param signal: array: the signal to get the temporal envelop from
-    :param N: int: the order of the filter
-    """
-
-    window = np.hanning(N)
-    signal_abs = np.abs(signal)
-    hann = 2 * window / window.sum()
-
-    convolution = np.convolve(hann, signal_abs, mode='valid')
-
-    plt.plot(convolution)
-    plt.show()
-
-
-
-
-
-
-
-def APP_enveloppe_temporelle2(signal, Fs):
-    """
-    This function is used to print on a graph the temporal envelop
-
-    :param signal: array: the signal to get the temporal envelop from
-    :param N: int: the order of the filter
-    """
-
-    # window = np.hanning(N)
-    signal_abs = np.abs(signal)
-    window = Fs / signal.size
-
-    convolution = np.convolve(window, signal_abs, mode='valid')
-
-    plt.plot(convolution)
-    plt.show()
-
-    inst_amplitude = np.abs(signal)  # envelope extraction
-    inst_phase = np.unwrap(np.angle(signal))  # inst phase
-    inst_freq = np.diff(inst_phase) / (2 * np.pi) * Fs  # inst frequenc
-
-    plt.plot(inst_amplitude, 'r')
-    plt.show()
 
 
 
@@ -517,10 +471,9 @@ def APP_play_music(signal, sampFreq, dictionnary):
 
 
 
-def APP_env_temp(signal, Fs, k):
+def APP_env_temp(signal, k):
 
     sigabs = np.abs(signal)
-
     h = np.ones(k)/k
 
     # filter the data using convolution
@@ -615,7 +568,7 @@ K = 3
 
 
 
-# APP_find_phase_ampl_freq(signal)
+
 
 
 
@@ -644,8 +597,8 @@ APP_sound_details(signal_guit, Fs_guit)
 signal, Fs = sf.read(note_basson_1000_Hz)
 
 k = APP_find_k()
-new_signal = APP_env_temp(signal, Fs, k)
-#new_signal_2 = APP_env_temp(new_signal, Fs, k)
+new_signal = APP_env_temp(signal, k)
+
 # writing back the signal into .wav file
 test_file_filtering = './filtered_sounds/note_basson_filtered_test_lucas.wav'
 sf.write(test_file_filtering, new_signal, samplerate=Fs)
