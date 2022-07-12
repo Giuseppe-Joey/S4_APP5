@@ -23,6 +23,8 @@ import math
 
 
 sound_data = './sounds/note_guitare_LAd.wav'
+signal, fs = sf.read(sound_data)
+
 def env_temp(sound_data,k):
     signal, fs = sf.read(sound_data)
     sigabs = np.abs(signal)
@@ -34,7 +36,7 @@ def env_temp(sound_data,k):
     # print(N)
 
     # n = np.arange(1, N-1)
-    h = np.ones(k)/((k-1)/2)
+    h = np.ones(k)/k
 
 
     # window = np.hanning(N)
@@ -75,6 +77,32 @@ def env_temp(sound_data,k):
     plt.show()
 
 
+def coupe_bande(fs):
+    signal, fs = sf.read(sound_data)
+    N = 1024
+    n = np.arange(0, N)
+
+    #1
+    m = 20 * N / fs
+    k = round((m * 2)+1)
+
+    if (k % 2) == 0:
+        k = k + 1
+
+
+    else:
+        print(" ")
+
+    h = (np.sin(np.pi * n * k / N)) / (N * np.sin(np.pi * n / N))
+    h[0] = k / N
+
+    plt.subplot(1, 1, 1)
+    print(h)
+    plt.plot(h)
+    plt.title("Passe-bas")
+
+    plt.tight_layout() #bien mettre les titres
+    plt.show()
 
 def find_k():
 
@@ -91,4 +119,4 @@ def find_k():
 
 
 k = find_k()
-env_temp(sound_data,k)
+coupe_bande(fs)
