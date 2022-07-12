@@ -115,7 +115,7 @@ def coupe_bande(fs,signal):
     plt.subplot(3, 1, 1)
     print(w1)
     plt.plot(signal)
-    plt.title("signal")
+    plt.title("signall")
     plt.subplot(3, 1, 2)
     print(w1)
     plt.plot(h_cb)
