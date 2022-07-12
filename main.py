@@ -19,9 +19,16 @@ import time
 import soundfile as sf
 
 
+
+
 note_guitare_LAd = './sounds/note_guitare_LAd.wav'
 note_basson_1000_Hz = './sounds/note_basson_plus_sinus_1000_Hz.wav'
+
 note_basson_filtered = './filtered_sounds/note_basson_filtered.wav'
+test_file_filtering = './filtered_sounds/note_basson_filtered_test_lucas.wav'
+
+
+
 
 
 
@@ -32,12 +39,25 @@ def main():
     # ///////////////////////////////////////////////////////////
     #                     GUITARE SECTION
     # ///////////////////////////////////////////////////////////
+    # -------
     signal_guitare, Fs_guitare = sf.read(note_guitare_LAd)
     APP_Final.sound_details(signal_guitare, Fs_guitare)
+    # -------
 
+    # -------
+    # enveloppe temporelle
     # k = APP_Final.find_k()
-
     # new_signal = APP_Final.env_temp(signal_guitare, k)
+    # -------
+
+    # -------
+
+    # -------
+
+
+    # -------
+
+    # -------
     # ///////////////////////////////////////////////////////////
 
 
@@ -47,23 +67,35 @@ def main():
     # ///////////////////////////////////////////////////////////
     #                      BASSON SECTION
     # ///////////////////////////////////////////////////////////
+    # -------
     signal_basson, Fs_basson = sf.read(note_basson_1000_Hz)
     APP_Final.sound_details(signal_basson, Fs_basson)
     # APP_Final.sound_processing_filter_1000Hz(note_basson_1000_Hz, note_basson_filtered)
+    # -------
 
+    # -------
+    # enveloppe temporelle
     # k = APP_Final.find_k()
     # new_signal = APP_Final.env_temp(signal_basson, k)
+    # -------
 
+    # -------
+    # filtrage du 1000Hz
     # signal_coupe = APP_Final.coupe_bande(signal_basson, Fs_basson)
+    # sf.write(test_file_filtering, signal_coupe, samplerate=Fs_basson)
+    # -------
 
-    APP_Final.amplitude_test(signal_basson, Fs_basson)
+    # -------
+    APP_Final.find_freq_peaks(signal_basson, Fs_basson)
+    # APP_Final.find_amp_and_phase(signal_basson, Fs_basson)
+    # -------
     # ///////////////////////////////////////////////////////////
 
 
 
-    # # writing back the signal into .wav file
-    # test_file_filtering = './filtered_sounds/note_basson_filtered_test_lucas.wav'
-    # sf.write(test_file_filtering, signal_coupe, samplerate=Fs_basson)
+
+
+
 
 
 

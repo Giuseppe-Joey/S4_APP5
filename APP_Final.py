@@ -261,9 +261,9 @@ def coupe_bande(signal, fs):
     """
     This function is a low pass filter and a cut band filter
 
-    :param signal: datasignal
-    :param fs: sample rate frequency
-    :return: None
+    :param signal: sound data: this is the extracted data from the sound
+    :param fs: sample rate frequency of the extracted sound data
+    :return: sig_lp: the signal convoluated twice with the cut band filter 1st and the the low pass filter
     """
 
     N = 1024
@@ -277,10 +277,12 @@ def coupe_bande(signal, fs):
 
     if (k % 2) == 0:
         k = k + 1
+        print("K value is: {}".format(k))
 
 
     else:
         print("WTF!!!")
+        print("K value is: {}".format(k))
 
     #2
     h_lp = np.zeros(N)
@@ -289,18 +291,24 @@ def coupe_bande(signal, fs):
 
     #3
     w1 = np.pi * ((k - 1) / N)
-    w0 = np.pi - w1
+    w0 = 2 * np.pi * 1000 / 44100
+    print("w0 value is: {}".format(w0))
 
     #4 dirac
-    d = np.zeros(N)
-    d[0] = 1
+    dirac = np.zeros(N)
+    dirac[0] = 1
+
+    # sig_lp = np.convolve(h_lp, signal)
+
 
     #5
-    h_cb = d * h_lp * 2 * np.cos(w0 * n1)
-    # h_cb = h_lp * 2 * np.cos(w0 * n1)
+    h_cb = dirac - h_lp * 2 * np.cos(w0 * n1)
 
-    #6
+    #6 Black magic!!!
     sig_cb = np.convolve(h_cb, signal)
+    sig_lp = np.convolve(h_lp, sig_cb)
+
+
 
     plt.subplot(3, 1, 1)
     plt.plot(signal)
@@ -311,14 +319,14 @@ def coupe_bande(signal, fs):
     plt.title("coupe-bande")
 
     plt.subplot(3, 1, 3)
-    sig_cb *= 100
-    plt.plot(sig_cb)
+    sig_lp *= 10
+    plt.plot(sig_lp)
     plt.title("signal coupe")
 
     plt.tight_layout() #bien mettre les titres
     plt.show()
 
-    return sig_cb
+    return sig_lp
 
 
 
@@ -330,7 +338,7 @@ def coupe_bande(signal, fs):
 
 
 
-def play_music(signal, sampFreq, dictionnary):
+def play_music(signal, Fs, dictionnary):
     """
     This function import the signal, plot the signal before filtering 1000Hz and after filtering
 
@@ -347,7 +355,7 @@ def play_music(signal, sampFreq, dictionnary):
     plt.rcParams['figure.figsize'] = (9, 7)
 
     # getting the duration in seconds from frequency
-    length_in_secs = signal.shape[0] / sampFreq
+    length_in_secs = signal.shape[0] / Fs
 
     # creating an array containing the time for the x_axis
     time = np.arange(signal.shape[0]) / signal.shape[0] * length_in_secs
@@ -356,7 +364,7 @@ def play_music(signal, sampFreq, dictionnary):
     fft_spectrum = np.fft.fft(signal)
     fft_spectrum_magnitude = magnitude_to_dB(np.abs(fft_spectrum))
 
-    freq = np.fft.fftfreq(fft_spectrum_magnitude.size, d=1. / sampFreq)
+    freq = np.fft.fftfreq(fft_spectrum_magnitude.size, d=1. / Fs)
     plt.plot(fft_spectrum_magnitude)
     plt.show()
 
@@ -385,18 +393,6 @@ def play_music(signal, sampFreq, dictionnary):
 
 
 
-def find_phase_ampl_freq(signal):
-
-    fft_spectrum = np.fft.fft(signal)
-    phase = np.angle(fft_spectrum, deg=True)
-
-    fft_spectrum = np.abs(fft_spectrum)
-    peaks, _ = find_peaks(fft_spectrum, prominence=(32, None))
-    plt.plot(fft_spectrum)
-    plt.plot(peaks, fft_spectrum[peaks], "x")
-    # plt.plot(np.zeros_like(fft_spectrum), "--", color="gray")
-    plt.show()
-
 
 
 
@@ -411,6 +407,13 @@ def find_phase_ampl_freq(signal):
 
 
 def env_temp(signal, k):
+    """
+    This function finds the temporal enveloppe of a signal
+
+    :param signal: sound data: this is the extracted data from the sound
+    :param k: int: the number of coeficients found
+    :return: sigh: the convoluated signal with k
+    """
 
     sigabs = np.abs(signal)
     h = np.ones(k)/k
@@ -456,7 +459,7 @@ def find_k():
     """
     This function find the k coeficients of a signal at -3dB for a rad/ech. (w)
 
-    :return: k: int: the frequency
+    :return: k: int: the k coeficients found
     """
 
     k = 0
@@ -469,33 +472,60 @@ def find_k():
             return k
 
 
-def amplitude_example(signal, fs):
-    # Number of sample points
-    N = 1000
 
-    # Sample spacing
-    T = 1.0 / 800.0  # f = 800 Hz
 
-    # Create a signal
-    x = np.linspace(0.0, N * T, N)
-    t0 = np.pi / 6  # non-zero phase of the second sine
-    y = np.sin(50.0 * 2.0 * np.pi * x) + 0.5 * np.sin(200.0 * 2.0 * np.pi * x + t0)
-    yf = np.fft.fft(y)  # to normalize use norm='ortho' as an additional argument
 
-    # Where is a 200 Hz frequency in the results?
-    freq = np.fft.fftfreq(x.size, d=T)
-    index, = np.where(np.isclose(freq, 200, atol=1 / (T * N)))
 
-    # Get magnitude and phase
-    magnitude = np.abs(yf[index[0]])
-    phase = np.angle(yf[index[0]])
-    print("Magnitude:", magnitude, ", phase:", phase)
 
-    # Plot a spectrum
-    plt.plot(freq[0:N // 2], 2 / N * np.abs(yf[0:N // 2]), label='amplitude spectrum')  # in a conventional form
-    plt.plot(freq[0:N // 2], np.angle(yf[0:N // 2]), label='phase spectrum')
-    plt.legend()
-    plt.grid()
+
+
+
+
+
+
+
+
+
+
+def find_freq_peaks(signal, Fs):
+    """
+    This function is used to find the peaks of a signal and print them on a graph
+
+    :param signal: sound data: this is the extracted data from the sound
+    :param fs: this is the sample frequency of the extracted signal
+    :return: None
+    """
+
+    #obtaining Amplitude vs Frequency spectrum we find absolute value of fourier transform
+    fft_spectrum = np.fft.fft(signal)
+    fft_spectrum_abs = np.abs(fft_spectrum)
+    peaks, _ = find_peaks(fft_spectrum_abs, prominence=(32, None), height=345)
+    print("the number of peaks is: {}".format(len(peaks)))
+
+
+     # plot the FFT amplitude BEFORE
+    plt.figure("Finding peaks harmonics", figsize=(12, 6))
+    plt.subplot(121)
+    plt.plot(fft_spectrum_abs)
+    plt.plot(peaks, fft_spectrum_abs[peaks], "x")
+    plt.title('Harmonics')
+    plt.xlabel('Sample Frequency')
+    plt.ylabel('FFT Amplitude')
+
+
+
+
+    fft_spectrum_dB = magnitude_to_dB(np.abs(fft_spectrum))
+
+
+     # plot the FFT amplitude BEFORE
+    plt.subplot(122)
+    plt.plot(fft_spectrum_dB)
+    plt.plot(peaks, fft_spectrum_dB[peaks], "x")
+    plt.title('Harmonics')
+    plt.xlabel('Sample Frequency')
+    plt.ylabel('FFT Amplitude (dB)')
+    plt.tight_layout()
     plt.show()
 
 
@@ -504,23 +534,26 @@ def amplitude_example(signal, fs):
 
 
 
+def find_amp_and_phase(signal, fs):
+    """
+    This function find the magnitude and the phase of a signal
+
+    :param signal: sound data: this is the extracted data from the sound
+    :param fs: this is the sample frequency of the extracted signal
+    :return: None
+    """
+
+    # creeation de la fennetre
+    window = np.hanning(signal.size)
+    signal_window = signal * window
 
 
+    fft_spectrum = np.fft.fft(signal_window)
+    magnitude_fft = np.abs(fft_spectrum)
+    print("Magnitude: {}".format(magnitude_fft))
 
-def amplitude_test(signal, fs):
-    from scipy.fftpack import fft
-    import numpy as np
+    magnitude_dB = magnitude_to_dB(magnitude_fft)
+    print("Magnitude in (dB): {}".format(magnitude_dB))
 
-    fft_data = np.fft.fft(signal)
-    magnitude = np.abs(fft_data)
-    print(magnitude)
-    plt.plot(20*np.log10(magnitude))
-
-
-
-    # phase = np.angle(np.arctan2(np.fft.fft(fft_data), np.fft.fft(fft_data)))
-    # print(phase)
-    #
-    # plt.plot(phase)
-    plt.show()
-
+    phase = np.angle(fft_spectrum)
+    print("Phase in rad/ech.: {}".format(phase))
