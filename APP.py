@@ -93,24 +93,6 @@ def sound_processing_filter_1000Hz(filename_input, filename_output):
 
 
 
-def apply_fft_with_window(signal):
-
-    # creating a window from the Fs (Sample Frequency)
-    window = np.hanning(signal.size)
-    print("This is the window:", window)
-
-    # keeping only the real numbers and not the complex part
-    signal = signal * window
-    fft_spectrum = np.fft.fft(signal)
-    fft_spectrum = np.fft.fftshift(np.log(np.abs(fft_spectrum)))
-    freq = np.fft.rfftfreq(fft_spectrum.size, d=1. / signal.size)
-
-    print("Freq:{}".format(freq))
-
-    return fft_spectrum
-
-
-
 
 
 

@@ -34,11 +34,6 @@ import time
 def main():
 
 
-    print("----- Importing dictionnary --------")
-    notes_frequency_dictionnary = APP_Final.notes_frequency_dictionnary()
-    notes_K_index_dictionnary = APP_Final.notes_K_index_dictionnary()
-    notes_factor_dictionnary = APP_Final.notes_factor_dictionnary()
-
     # tests with .WAV files
     note_guitare_LAd = './sounds/note_guitare_LAd.wav'
     note_basson_1000_Hz = './sounds/note_basson_plus_sinus_1000_Hz.wav'

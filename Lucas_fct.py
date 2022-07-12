@@ -23,35 +23,20 @@ import math
 
 
 sound_data = './sounds/note_guitare_LAd.wav'
+
+
+
+
+
 def env_temp(sound_data,k):
     signal, fs = sf.read(sound_data)
     sigabs = np.abs(signal)
 
-    fc = 12000
-
-    # m = (k-1)/2
-    # N = round(fs * m / fc)
-    # print(N)
-
-    # n = np.arange(1, N-1)
-    h = np.ones(k)/((k-1)/2)
-
-
-    # window = np.hanning(N)
-    # window = window / window.sum()
+    h = np.ones(k)/k
 
     # filter the data using convolution
-    sigh = (np.convolve(h, sigabs))
+    sigh = np.convolve(h, sigabs)
 
-
-    # w0 = 2 * np.pi
-    # w1 = (fc * 2 * np.pi) / fs
-    # k = 3
-
-
-
-    #sigw = [x * h for x in signal]
-    # env = h * sigabs
 
     plt.subplot(311)
     plt.title("signal de base")
@@ -74,6 +59,17 @@ def env_temp(sound_data,k):
     plt.tight_layout()
     plt.show()
 
+    return sigh
+
+
+
+
+
+
+
+
+
+
 
 
 def find_k():
@@ -91,4 +87,4 @@ def find_k():
 
 
 k = find_k()
-env_temp(sound_data,k)
+env_temp(sound_data, k)
