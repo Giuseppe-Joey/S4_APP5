@@ -490,7 +490,7 @@ def APP_play_music(signal, sampFreq, dictionnary):
             f = val[2]
             somme = np.sin(2 * np.pi * freq_fond * length_in_secs)
             compteur += 1
-        if
+
 
 
 
@@ -516,7 +516,56 @@ def APP_play_music(signal, sampFreq, dictionnary):
 
 
 
+
+def APP_env_temp(signal, Fs, k):
+
+    sigabs = np.abs(signal)
+
+    h = np.ones(k)/k
+
+    # filter the data using convolution
+    sigh = np.convolve(h, sigabs)
+
+    plt.subplot(311)
+    plt.title("signal de base")
+    plt.plot(signal)
+    plt.xlabel("fréquence échantillion")
+    plt.ylabel("amplitude")
+
+    plt.subplot(312)
+    plt.title("signal redressé")
+    plt.plot(sigabs)
+    plt.xlabel("fréquence échantillion")
+    plt.ylabel("amplitude")
+
+    plt.subplot(313)
+    plt.title("enveloppe temporelle")
+    plt.plot(sigh)
+    plt.xlabel("fréquence échantillion")
+    plt.ylabel("amplitude")
+
+    plt.tight_layout()
+    plt.show()
+
+    return sigh
+
+
+
+
+
+
+
+
+
+
+
+
 def APP_find_k():
+    """
+    This function find the k coeficients of a signal at -3dB for a rad/ech. (w)
+
+    :return: k: int: the frequency
+    """
 
     k = 0
     while k < 1000:
@@ -526,7 +575,6 @@ def APP_find_k():
             k = math.trunc(k)
             print("k value is: {}".format(k))
             return k
-
 
 
 
@@ -582,14 +630,25 @@ note_basson_filtered = './filtered_sounds/note_basson_filtered.wav'
 
 
 
-
 sound_data = './sounds/note_guitare_LAd.wav'
 signal_guit, Fs_guit = sf.read(sound_data)
 APP_sound_details(signal_guit, Fs_guit)
 
-APP_play_music(signal_guit, Fs_guit)
-
-
+# APP_play_music(signal_guit, Fs_guit)
 
 
 # APP_find_phase_ampl_freq(signal_guit)
+
+
+
+signal, Fs = sf.read(note_basson_1000_Hz)
+
+k = APP_find_k()
+new_signal = APP_env_temp(signal, Fs, k)
+#new_signal_2 = APP_env_temp(new_signal, Fs, k)
+# writing back the signal into .wav file
+test_file_filtering = './filtered_sounds/note_basson_filtered_test_lucas.wav'
+sf.write(test_file_filtering, new_signal, samplerate=Fs)
+
+
+

@@ -1,4 +1,7 @@
 
+
+
+
 import numpy as np
 import scipy
 import matplotlib.pyplot as plt
@@ -12,6 +15,9 @@ import math
 
 
 
+
+
+
 #(extract 3 param)
 #1 extraction des parametres
 #2 applique fenetre de hanning
@@ -22,7 +28,11 @@ import math
 #coupe bas 20hz
 
 
+
+
 sound_data = './sounds/note_guitare_LAd.wav'
+
+
 
 
 
@@ -73,6 +83,10 @@ def env_temp(sound_data,k):
 
 
 def find_k():
+    """
+    This function
+    :return:
+    """
 
     k = 0
     while k < 1000:
