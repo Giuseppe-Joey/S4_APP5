@@ -64,9 +64,10 @@ def notes_frequency_dictionnary():
 def sound_processing_filter_1000Hz(filename_input, filename_output):
     """
     This function import the signal, plot the signal before filtering 1000Hz and after filtering
-    :param filename_input:
-    :param filename_output:
-    :return:
+
+    :param filename_input: the file to extract data from
+    :param filename_output: the file path to be written
+    :return: None
     """
 
     # matplotlib inline
@@ -194,7 +195,8 @@ def sound_details(signal, Fs):
 def window_and_fft(signal):
     """
     This function create a Hann Window from the signal size, multiply the window on the
-    signal first and than apply FFT Shift on the fft and convert the magnitude into decibel
+    signal first and than apply FFT Shift on the fft and convert the magnitude into decibel.
+
     :param signal: the data extracted from the .wav file
     :return: None
     """
@@ -259,6 +261,7 @@ def window_and_fft(signal):
 def play_music(signal, sampFreq, dictionnary):
     """
     This function import the signal, plot the signal before filtering 1000Hz and after filtering
+
     :param filename_input:
     :param filename_output:
     :return:
